@@ -5,6 +5,11 @@ mono:
 
 install:
   - nuget restore GitManager.sln
-  
+  - nuget install NUnit.ConsoleRunners -Version 3.9.0 -OutputDirectory testrunner
+
+script:
+  - xbuild /p:Configuration=Release GitManager.sln
+  - mono ./testrunner/NUnit.ConsoleRunners.3.9.0/tools/nunit-console.exe ./Test/bin/Release/Test.dll
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
