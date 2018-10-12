@@ -5,9 +5,10 @@ namespace Test
     [TestFixture]
     public class GitControlTest
     {
-        public bool CheckSelfMergedRequestsTest(bool reporterResult)
+        [Test]
+        public void  CheckSelfMergedRequestsTest()
         {
-            return false;
+            Assert.True(true);
         }
     }
 }
