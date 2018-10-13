@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NLog;
 
 namespace GitManager.Connection
@@ -13,14 +13,14 @@ namespace GitManager.Connection
         private readonly HttpClient _client;
 
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-        
-        public static WebApi Instance => Container.Value;
 
         private WebApi()
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
             _client = new HttpClient();
         }
+
+        public static WebApi Instance => Container.Value;
 
         public async Task<TOut> GetAsync<TOut>(string apiCall, IConfig config)
         {
@@ -46,7 +46,6 @@ namespace GitManager.Connection
                 _logger.Error(ex, "Get api call failed.");
                 return default(TOut);
             }
-
         }
     }
 }

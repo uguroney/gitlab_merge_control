@@ -11,8 +11,8 @@ namespace GitManager
 {
     public class MailNotification : INotify
     {
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly IConfig _config;
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public MailNotification(IConfig config)
         {
@@ -37,9 +37,7 @@ namespace GitManager
             var body = new StringBuilder();
 
             foreach (var request in info)
-            {
                 body.Append($"{request.Id},{request.CreateAt},{request.Assignee?.UserName},{request.Title}\n");
-            }
 
             mail.Body = body.ToString();
             try
@@ -51,6 +49,7 @@ namespace GitManager
                 _logger.Error(ex, "Fail to send mail notification.");
                 return false;
             }
+
             return true;
         }
     }

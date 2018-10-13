@@ -2,14 +2,11 @@ language: csharp
 solution: GitManager.sln
 mono:
   - latest
-
-install:
+before_install:
+  - sudo apt-get install nunit-console
+before_script:
   - nuget restore GitManager.sln
-  - nuget install NUnit.ConsoleRunner -Version 3.9.0 -OutputDirectory testrunner
-
-script:
-  - xbuild /p:Configuration=Release GitManager.sln
-  - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit-console.exe ./Test/bin/Release/Test.dll
-
+after_script:
+  - nunit-console Test/bin/Release/GitManager.Test.dll
 after_success:
   - bash <(curl -s https://codecov.io/bash)

@@ -10,6 +10,5 @@
         string Username { get; }
         string Password { get; }
         int Port { get; }
-
     }
 }

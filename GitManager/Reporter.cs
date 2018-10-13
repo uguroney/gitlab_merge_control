@@ -1,10 +1,10 @@
-﻿using GitManager.DAO;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using GitManager.DAO;
+using NLog;
 
 namespace GitManager
 {
@@ -18,23 +18,21 @@ namespace GitManager
             try
             {
                 using (file = new FileStream("report.csv", FileMode.Append, FileAccess.Write, FileShare.None,
-                    bufferSize: 4096, useAsync: true))
+                    4096, true))
                 {
-
                     Parallel.ForEach(mergeRequests, request =>
-                              {
-                                  try
-                                  {
-                                      var line = $"{request.Id},{request.CreateAt},{request.Assignee.UserName},{request.Title}\n";
-                                      var buffer = Encoding.Unicode.GetBytes(line);
-                                      file.WriteAsync(buffer, 0, buffer.Length);
-                                  }
-                                  catch (Exception ex)
-                                  {
-                                      _logger.Error(ex, "Cannot process input.");
-                                  }
-                              });
-
+                    {
+                        try
+                        {
+                            var line = $"{request.Id},{request.CreateAt},{request.Assignee.UserName},{request.Title}\n";
+                            var buffer = Encoding.Unicode.GetBytes(line);
+                            file.WriteAsync(buffer, 0, buffer.Length);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error(ex, "Cannot process input.");
+                        }
+                    });
                 }
             }
             catch (FileNotFoundException ex)

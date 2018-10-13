@@ -1,26 +1,29 @@
-﻿using Newtonsoft.Json;
-using NLog;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
+using Newtonsoft.Json;
+using NLog;
 
 namespace GitManager.Connection
 {
     public class ConfigurationLoader
     {
-        private static readonly Lazy<ConfigurationLoader> Container = new Lazy<ConfigurationLoader>(() => new ConfigurationLoader());
+        private static readonly Lazy<ConfigurationLoader> Container =
+            new Lazy<ConfigurationLoader>(() => new ConfigurationLoader());
+
+        private readonly DirectoryInfo _executingDirectoryInfo =
+            new FileInfo(Assembly.GetExecutingAssembly().CodeBase.Replace("file:///", "")).Directory;
 
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly DirectoryInfo _executingDirectoryInfo = new FileInfo(Assembly.GetExecutingAssembly().CodeBase.Replace("file:///", "")).Directory;
-
-        public static ConfigurationLoader Instance => Container.Value;
-
-        public Configuration Config { get; protected set; }
 
         private ConfigurationLoader()
         {
             LoadConfiguration();
         }
+
+        public static ConfigurationLoader Instance => Container.Value;
+
+        public Configuration Config { get; protected set; }
 
         private void LoadConfiguration()
         {
@@ -42,7 +45,9 @@ namespace GitManager.Connection
                     _logger.Error("Cannot get executing directory information.");
                     return default(T);
                 }
-                streamReader = new StreamReader($"{_executingDirectoryInfo.FullName}{Path.DirectorySeparatorChar}{configFile}");
+
+                streamReader =
+                    new StreamReader($"{_executingDirectoryInfo.FullName}{Path.DirectorySeparatorChar}{configFile}");
                 var json = streamReader.ReadToEnd();
                 var item = JsonConvert.DeserializeObject<T>(json);
                 _logger.Debug("Configuration loaded.");

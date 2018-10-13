@@ -6,7 +6,7 @@ namespace Test
     public class GitControlTest
     {
         [Test]
-        public void  CheckSelfMergedRequestsTest()
+        public void CheckSelfMergedRequestsTest()
         {
             Assert.True(true);
         }

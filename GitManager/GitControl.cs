@@ -7,8 +7,8 @@ namespace GitManager
     public class GitControl
     {
         private readonly IGitApi _gitApi;
-        private readonly IReporter _reporter;
         private readonly INotify _notify;
+        private readonly IReporter _reporter;
         private readonly IStorage _storage;
 
         private readonly Timer _timer;
@@ -20,7 +20,7 @@ namespace GitManager
             _notify = notify;
             _storage = storage;
 
-            _timer = new Timer(60000*30) { AutoReset = true };
+            _timer = new Timer(60000 * 30) {AutoReset = true};
             _timer.Elapsed += (sender, eventArgs) => CheckSelfMergedRequests();
         }
 
@@ -35,10 +35,7 @@ namespace GitManager
 
             _storage.StoreMergeRequests(list);
 
-            if (list.Count != 0)
-            {
-                _notify.Notify(list);
-            }
+            if (list.Count != 0) _notify.Notify(list);
 
             return _reporter.WriteToCsv(list);
         }

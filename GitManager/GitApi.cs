@@ -9,7 +9,8 @@ namespace GitManager
     {
         public List<MergeRequest> GetMergeRequests()
         {
-            var task = Task.Run(() => WebApi.Instance.GetAsync<List<MergeRequest>>("merge_requests?scope=all", new Config()));
+            var task = Task.Run(() =>
+                WebApi.Instance.GetAsync<List<MergeRequest>>("merge_requests?scope=all", new Config()));
             task.Wait();
             return task.Result;
         }

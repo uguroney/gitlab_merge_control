@@ -12,16 +12,12 @@ namespace GitManager
             using (var ctx = new DataContext())
             {
                 foreach (var mergeRequest in requests)
-                {
                     if (!ctx.MergeRequests.Any(item => item.RequestId == mergeRequest.Id))
-                    {
                         ctx.MergeRequests.Add(new MergeRequestEntity
                         {
                             RequestId = mergeRequest.Id,
                             User = mergeRequest.Author?.UserName
                         });
-                    }
-                }
 
                 ctx.SaveChanges();
             }
@@ -36,16 +32,11 @@ namespace GitManager
             using (var ctx = new DataContext())
             {
                 foreach (var mergeRequest in requests)
-                {
                     if (!ctx.MergeRequests.Any(item => item.RequestId == mergeRequest.Id))
-                    {
                         filteredList.Add(mergeRequest);
-                    }
-                }
             }
 
             return filteredList;
-
         }
     }
 }
