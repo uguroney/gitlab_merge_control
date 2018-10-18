@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using GitManager.DAO;
 
 namespace GitManager
 {
@@ -28,16 +30,30 @@ namespace GitManager
         {
             var mergeRequests = _gitApi.GetMergeRequests();
 
-            var filteredMergeRequests = mergeRequests.Where(request =>
-                request.Assignee?.Id == request.Author?.Id && request.CreateAt >= DateTime.Now.AddDays(-30));
+            if (mergeRequests == null || mergeRequests.Count == 0)
+                return false;
 
-            var list = _storage.FilterNewRequests(mergeRequests);
+            var filteredMergeRequests = FilterMergeRequests(mergeRequests);
+
+            if (filteredMergeRequests.Count == 0)
+            {
+                return false;
+            }
+            
+            var list = _storage.FilterNewRequests(filteredMergeRequests);
 
             _storage.StoreMergeRequests(list);
 
             if (list.Count != 0) _notify.Notify(list);
 
             return _reporter.WriteToCsv(list);
+        }
+
+        private static List<MergeRequest> FilterMergeRequests(List<MergeRequest> mergeRequests)
+        {
+            var filteredMergeRequests = mergeRequests.Where(request =>
+                request.Assignee?.Id == request.Author?.Id && request.CreateAt >= DateTime.Now.AddDays(-30)).ToList();
+            return filteredMergeRequests;
         }
 
         public void Start()

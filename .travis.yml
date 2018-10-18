@@ -8,5 +8,3 @@ before_script:
   - nuget restore GitManager.sln
 after_script:
   - nunit-console Test/bin/Release/GitManager.Test.dll
-after_success:
-  - bash <(curl -s https://codecov.io/bash)

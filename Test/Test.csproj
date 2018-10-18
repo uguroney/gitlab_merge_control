@@ -25,6 +25,21 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
+  <ItemDefinitionGroup>  
+    <PostBuildEvent>  
+    <Command>mono packages/OpenCover.4.6.519/tools/OpenCover.Console.exe -target:"packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe" -targetargs:"GitManager.Test.dll" -output:CoverageResult.xml -log:All -searchdirs:"GitManager" -filter:"+[GitManager]* -[GitManager.Test]*" -targetdir:"Test/bin/Debug"</Command>  
+    </PostBuildEvent>  
+  </ItemDefinitionGroup>  
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">  
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>  
+  </PropertyGroup>
+
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">  
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>  
+  </PropertyGroup> 
+
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Castle.Core">
